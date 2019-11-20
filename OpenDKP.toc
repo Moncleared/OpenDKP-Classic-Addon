@@ -1,0 +1,8 @@
+## Interface:11302
+## Title: OpenDKP
+## Author: Moncs
+## Notes: Supporting addon for opendkp.com - an open source dkp tracking system
+## SavedVariables: OpenDKP_Snapshots
+OpenDKP.lua
+Virtual.xml
+OpenDKP.xml

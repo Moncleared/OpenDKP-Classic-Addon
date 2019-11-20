@@ -1,0 +1,187 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+    <Script File="OpenDKP.lua" />
+    <Frame name="OpenDKP_Attendance" parent="UIParent" hidden="true" enableMouse="true" toplevel="true" movable="true" clampedToScreen="true">
+        <size>
+            <AbsDimension x="650" y="425" />
+        </size>
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture file="Interface\DialogFrame\UI-DialogBox-Header">
+                    <Size>
+                        <AbsDimension x="256" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="12"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString name="OpenDKP_attendance_title" inherits="GameFontNormal" text="Raid Attendance">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-2" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="OpenDKP_attendance_desc" inherits="GameFontNormal" text="Raid Ticks">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-25" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="OpenDKP_attendance_close" inherits="UIPanelCloseButton">
+                <Size>
+                    <AbsDimension x="30" y="30" />
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-6" y="-6" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+						PlaySound(799);
+						OpenDKP_Attendance:Hide()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="OpenDKP_attendance_record" inherits="GameMenuButtonTemplate" text="Record Snapshot">
+                <Size>
+                    <AbsDimension x="125" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-12" y="12"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+						PlaySound(799);
+						OpenDKP_RecordAttendance();
+                    </OnClick>
+                    <OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+						GameTooltip:SetText("Records a snapshot of the players currently in your raid group.");
+                    </OnEnter>
+                    <OnLeave>
+						GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Button>
+            <Button name="OpenDKP_attendance_dropdown" inherits="UIDropDownMenuTemplate">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="-5" y="5" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnShow>
+						OpenDKP_UIDropDownMenu_Initialize(self, OpenDKP_attendanceDropdown);
+						UIDropDownMenu_SetWidth(self, 140);
+                    </OnShow>
+                </Scripts>
+            </Button>
+            <Button name="OpenDKP_attendance_delete" inherits="GameMenuButtonTemplate" text="Delete Snapshot">
+                <Size>
+                    <AbsDimension x="125" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeTo="OpenDKP_attendance_dropdown">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+						PlaySound(799);
+						OpenDKP_deleteAttendance();
+                    </OnClick>
+                    <OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
+						GameTooltip:SetText("Deletes the snapshot currently selected in the dropdown menu.\nThis may be different from the snapshot you're currently viewing.\n\n|c00FF0000Warning: This action cannot be undone!|r");
+                    </OnEnter>
+                    <OnLeave>
+						GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Button>
+            <ScrollFrame name="GuildScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize val="16"/>
+                    <TileSize val="32"/>
+                    <BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+                </Backdrop>
+                <Size>
+                    <AbsDimension x="575" y="300" />
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="25" y="-50" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <ScrollChild>
+                    <EditBox name="attendance_editbox" multiLine="true">
+                        <Size x="575" y="300" />
+                        <Scripts>
+                            <OnLoad>
+				                self:SetAutoFocus(false);
+                                self:SetText("Hello World");
+                                self:SetTextInsets(10,10,10,10);
+                            </OnLoad>
+                        </Scripts>
+                        <FontString name="testFontString" inherits="ChatFontNormal" />
+                    </EditBox>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+        <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+            <Color r="0" g="0" b="0" />
+            <BackgroundInsets>
+                <AbsInset left="11" right="12" top="12" bottom="11" />
+            </BackgroundInsets>
+            <TileSize>
+                <AbsValue val="32" />
+            </TileSize>
+            <EdgeSize>
+                <AbsValue val="32" />
+            </EdgeSize>
+        </Backdrop>
+        <Scripts>
+            <OnMouseDown>
+				self:StartMoving();
+            </OnMouseDown>
+            <OnMouseUp>
+				self:StopMovingOrSizing();
+            </OnMouseUp>
+            <OnLoad>
+                OpenDKP_Attendance:Show();
+            </OnLoad>            
+        </Scripts>
+    </Frame>
+</Ui>
