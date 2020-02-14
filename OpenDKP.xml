@@ -178,10 +178,7 @@
             </OnMouseDown>
             <OnMouseUp>
 				self:StopMovingOrSizing();
-            </OnMouseUp>
-            <OnLoad>
-                OpenDKP_Attendance:Show();
-            </OnLoad>            
+            </OnMouseUp>            
         </Scripts>
     </Frame>
 </Ui>

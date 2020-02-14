@@ -1,4 +1,4 @@
-## Interface:11302
+## Interface:11303
 ## Title: OpenDKP
 ## Author: Moncs
 ## Notes: Supporting addon for opendkp.com - an open source dkp tracking system
